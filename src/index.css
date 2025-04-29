@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -35,19 +36,12 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -98,4 +92,71 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  h1 {
+    @apply text-4xl font-bold text-portfolio-dark;
+  }
+  
+  h2 {
+    @apply text-3xl font-semibold text-portfolio-dark;
+  }
+  
+  h3 {
+    @apply text-2xl font-semibold text-portfolio-dark;
+  }
+  
+  h4 {
+    @apply text-xl font-semibold text-portfolio-dark;
+  }
+  
+  section {
+    @apply py-16;
+  }
+
+  a {
+    @apply transition-colors duration-200;
+  }
+}
+
+@layer components {
+  .section-title {
+    @apply text-3xl font-bold mb-10 relative inline-block;
+  }
+  
+  .section-title::after {
+    content: '';
+    @apply absolute -bottom-2 left-0 w-1/2 h-1 bg-portfolio-blue rounded-full;
+  }
+  
+  .skill-tag {
+    @apply py-2 px-4 bg-white rounded-lg shadow-md border border-gray-100 text-center text-sm font-medium text-portfolio-medium-dark hover:shadow-lg transition-shadow;
+  }
+  
+  .experience-card {
+    @apply bg-white p-6 rounded-xl shadow-lg border-l-4 border-portfolio-blue mb-6;
+  }
+  
+  .project-card {
+    @apply bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow;
+  }
+
+  .tech-tag {
+    @apply inline-block bg-portfolio-light-gray text-portfolio-medium-dark rounded-md px-2 py-1 text-xs font-medium mr-2 mb-2;
+  }
+
+  .reveal {
+    @apply opacity-0 translate-y-10 transition-all duration-700 ease-out;
+  }
+  
+  .reveal.active {
+    @apply opacity-100 translate-y-0;
+  }
+
+  .social-icon {
+    @apply text-portfolio-dark hover:text-portfolio-blue transition-colors duration-200;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
 }
