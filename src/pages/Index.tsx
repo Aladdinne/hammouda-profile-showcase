@@ -1,35 +1,33 @@
+import { useEffect, useState } from 'react';
+import { ArrowUpRight, ArrowDown, Moon, Sun, Menu, X, Code2, Layers, Container, MapPin, ArrowUp } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import PortfolioSections, { SocialLinks } from '@/components/PortfolioSections';
+import { PortfolioLanguage, Language, usePortfolioText } from '@/components/portfolio-settings';
+import avatar from '@/assets/alaeddine-avatar.png.asset.json';
 
-import React, { useEffect } from 'react';
-import Navbar from '@/components/Navbar';
-import Hero from '@/components/Hero';
-import Skills from '@/components/Skills';
-import Experience from '@/components/Experience';
-import Projects from '@/components/Projects';
-import Education from '@/components/Education';
-import Contact from '@/components/Contact';
-import Footer from '@/components/Footer';
-import ScrollToTop from '@/components/ScrollToTop';
-import { useRevealAnimation } from '@/hooks/use-intersection-observer';
-
-const Index = () => {
-  // Initialize animation observer
-  useRevealAnimation();
-  
-  return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
-      <main>
-        <Hero />
-        <Skills />
-        <Experience />
-        <Projects />
-        <Education />
-        <Contact />
-      </main>
-      <Footer />
-      <ScrollToTop />
-    </div>
-  );
-};
-
-export default Index;
+function PortfolioContent({language,setLanguage,dark,setDark}:{language:Language;setLanguage:(language:Language)=>void;dark:boolean;setDark:(dark:boolean)=>void}) {
+ const t=usePortfolioText(); const [menu,setMenu]=useState(false);
+ const links=[['experiences',t('Expériences','Experience')],['projects',t('Projets','Projects')],['skills',t('Compétences','Skills')],['education',t('Formation','Education')],['contact','Contact']];
+ return <div className="min-h-screen bg-background text-foreground">
+ <header className="portfolio-nav"><div className="portfolio-wrap"><div className="nav-inner"><a href="#home" className="brand" aria-label="Alaeddine Hammouda"><span className="brand-mark">A<span className="text-primary">.</span></span><span className="brand-name">Alaeddine Hammouda<span className="text-primary">.</span></span></a><nav className="nav-links" aria-label={t('Navigation principale','Main navigation')}>{links.map(([id,label])=><a href={`#${id}`} key={id}>{label}</a>)}</nav><div className="nav-tools"><div className="language-switch" aria-label={t('Langue','Language')}><Button variant="ghost" aria-pressed={language==='fr'} onClick={()=>setLanguage('fr')}>FR</Button><Button variant="ghost" aria-pressed={language==='en'} onClick={()=>setLanguage('en')}>EN</Button></div><Button variant="outline" size="icon" className="rounded-full h-9 w-9" title={dark?t('Mode clair','Light mode'):t('Mode sombre','Dark mode')} aria-label={dark?t('Mode clair','Light mode'):t('Mode sombre','Dark mode')} onClick={()=>setDark(!dark)}>{dark?<Sun/>:<Moon/>}</Button><Button variant="ghost" size="icon" className="md:hidden h-9 w-9" aria-label={t('Menu','Menu')} aria-expanded={menu} onClick={()=>setMenu(!menu)}>{menu?<X/>:<Menu/>}</Button></div></div>{menu&&<nav className="mobile-nav" aria-label={t('Navigation mobile','Mobile navigation')}>{links.map(([id,label])=><a href={`#${id}`} onClick={()=>setMenu(false)} key={id}>{label}</a>)}</nav>}</div></header>
+ <main>
+ <section id="home" className="portfolio-home portfolio-wrap"><div className="hero-grid animate-fade-in">
+ <article className="bento-tile intro-tile"><div><p className="eyebrow"><span className="status-dot"/>{t('Ouvert aux opportunités','Open to opportunities')}</p><h1 className="intro-title">Alaeddine<span>Hammouda.</span></h1><p className="intro-role">{t('Développeur Full Stack','Full Stack Developer')}<br/>Java / Angular & DevOps</p><div className="intro-description"><p>{t('Je conçois des solutions robustes, sécurisées et performantes. De l’architecture au déploiement, je transforme les besoins métier en produits qui font la différence.','I build robust, secure and high-performance solutions. From architecture to deployment, I turn business needs into products that make a difference.')}</p><img className="avatar" src={avatar.url} alt={t('Avatar d’Alaeddine Hammouda','Alaeddine Hammouda’s avatar')}/></div></div><div className="intro-actions"><Button asChild className="rounded-xl"><a href="#contact">{t('Me contacter','Contact me')}<ArrowUpRight size={16}/></a></Button><Button asChild variant="outline" className="rounded-xl"><a href="#experiences">{t('Mon parcours','My journey')}<ArrowDown size={16}/></a></Button><SocialLinks/></div><p className="muted-copy flex items-center gap-2"><MapPin size={13}/>Ariana, {t('Tunisie','Tunisia')}</p></article>
+ <article className="bento-tile current-tile"><div className="flex justify-between items-center"><p className="eyebrow">{t('Actuellement','Currently')}</p><ArrowUpRight size={18} className="text-muted-foreground"/></div><h2>TSE Consulting INT</h2><p className="muted-copy">Full Stack Java/Angular · {t('Sept. 2025 — Présent','Sep 2025 — Present')}</p><p className="role-note">{t('ERP, e-facturation & intégration fiscale TEJ.','ERP, e-invoicing & TEJ tax integration.')}<br/>{t('Des solutions métier, prêtes pour la production.','Business solutions, ready for production.')}</p></article>
+ <article className="bento-tile metric-tile metric-primary"><strong>30–40%</strong><p>{t('Optimisation des bases de données','Database optimization')}<br/>PostgreSQL & MongoDB</p></article>
+ <article className="bento-tile metric-tile"><strong>10 → 2 min</strong><p>{t('Temps de déploiement réduit','Reduced deployment time')}<br/>{t('avec des pipelines CI/CD','with CI/CD pipelines')}</p></article>
+ <article className="bento-tile achievement-tile"><h2 className="tile-heading">{t('Du code. Un impact concret.','Code. Real-world impact.')}</h2><p className="muted-copy">{t('Des résultats mesurables, au cœur de chaque projet.','Measurable results at the heart of every project.')}</p><div className="achievement-values"><div><strong>5+</strong><span>{t('projets clients','client projects')}</span></div><div><strong>40+</strong><span>{t('problèmes résolus','issues resolved')}</span></div><div><strong>−70%</strong><span>{t('recherche RFID','RFID search time')}</span></div></div></article>
+ <article className="bento-tile stack-preview"><p><span className="stack-icon"><Code2 size={16}/></span>Java / Spring Boot</p><p><span className="stack-icon"><Layers size={16}/></span>Angular / React</p><p><span className="stack-icon"><Container size={16}/></span>Docker / CI/CD</p></article>
+ <article className="bento-tile freelance-tile"><p className="eyebrow">Freelance</p><h2 className="tile-heading">{t('Construisons la suite.','Let’s build what’s next.')}</h2><p className="muted-copy">{t('3+ projets indépendants, du web à l’automatisation.','3+ independent projects, from web to automation.')}</p><a href="#contact" className="text-primary flex items-center justify-between text-xs font-semibold">{t('Parlons de votre projet','Let’s talk about your project')}<ArrowUpRight size={17}/></a></article>
+ </div></section>
+ <PortfolioSections/>
+ </main><footer className="portfolio-footer"><div className="portfolio-wrap footer-inner"><p>© {new Date().getFullYear()} Alaeddine Hammouda</p><a href="#home" className="flex items-center gap-2">{t('Retour en haut','Back to top')}<ArrowUp size={14}/></a></div></footer>
+ </div>;
+}
+export default function Index() {
+ const [language,setLanguage]=useState<Language>(()=>{try{return localStorage.getItem('portfolio-language')==='en'?'en':'fr';}catch{return 'fr';}});
+ const [dark,setDark]=useState(()=>{try{return localStorage.getItem('portfolio-theme')!=='light';}catch{return true;}});
+ useEffect(()=>{document.documentElement.classList.toggle('dark',dark);try{localStorage.setItem('portfolio-theme',dark?'dark':'light');}catch{/* Appearance still works without storage. */}},[dark]);
+ useEffect(()=>{document.documentElement.lang=language;try{localStorage.setItem('portfolio-language',language);}catch{/* Translation still works without storage. */}},[language]);
+ return <PortfolioLanguage.Provider value={language}><PortfolioContent language={language} setLanguage={setLanguage} dark={dark} setDark={setDark}/></PortfolioLanguage.Provider>;
+}
