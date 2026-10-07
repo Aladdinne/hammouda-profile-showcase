@@ -102,7 +102,7 @@ const Contact = () => {
                   <p className="text-sm text-portfolio-medium-dark mb-2">Retrouvez-moi sur</p>
                   <div className="flex gap-4">
                     <a 
-                      href="https://linkedin.com/" 
+                      href="https://www.linkedin.com/in/alaeddine-hammouda-93927415b/" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="text-portfolio-dark hover:text-portfolio-blue transition-colors"
@@ -111,7 +111,7 @@ const Contact = () => {
                       <Linkedin size={24} />
                     </a>
                     <a 
-                      href="https://github.com/" 
+                      href="https://github.com/Aladdinne" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="text-portfolio-dark hover:text-portfolio-blue transition-colors"
