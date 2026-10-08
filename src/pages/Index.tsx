@@ -5,9 +5,7 @@ import PortfolioSections, { SocialLinks } from '@/components/PortfolioSections';
 import { PortfolioLanguage, Language, usePortfolioText } from '@/components/portfolio-settings';
 import avatar from '@/assets/alaeddine-avatar.png';
 
-const avatarUrl = ['localhost', '127.0.0.1'].includes(window.location.hostname)
-  ? new URL(avatar.url, 'https://id-preview--8356518f-9d29-4dc3-9bd8-b2e9f5de9476.lovable.app').href
-  : avatar.url;
+const avatarUrl = avatar;
 
 function PortfolioContent({language,setLanguage,dark,setDark}:{language:Language;setLanguage:(language:Language)=>void;dark:boolean;setDark:(dark:boolean)=>void}) {
  const t=usePortfolioText(); const [menu,setMenu]=useState(false);
