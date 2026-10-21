@@ -31,5 +31,6 @@ export default function Index() {
  const [dark,setDark]=useState(()=>{try{return localStorage.getItem('portfolio-theme')!=='light';}catch{return true;}});
  useEffect(()=>{document.documentElement.classList.toggle('dark',dark);try{localStorage.setItem('portfolio-theme',dark?'dark':'light');}catch{/* Appearance still works without storage. */}},[dark]);
  useEffect(()=>{document.documentElement.lang=language;try{localStorage.setItem('portfolio-language',language);}catch{/* Translation still works without storage. */}},[language]);
+ useEffect(()=>{const els=document.querySelectorAll('.portfolio-section .section-header,.experience-row,.bento-tile:not(.hero-grid .bento-tile),.certifications,.contact-form');els.forEach((el,i)=>{el.classList.add('reveal-item');(el as HTMLElement).style.transitionDelay=`${(i%3)*80}ms`;});const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');io.unobserve(e.target);}}),{threshold:.12});els.forEach(el=>io.observe(el));return()=>io.disconnect();},[]);
  return <PortfolioLanguage.Provider value={language}><PortfolioContent language={language} setLanguage={setLanguage} dark={dark} setDark={setDark}/></PortfolioLanguage.Provider>;
 }
