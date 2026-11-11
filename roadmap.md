@@ -5,3 +5,4 @@
 - [x] Place supplied avatar beside introduction.
 - [x] Verify navigation, switches and avatar rendering.
 - [x] Add original CV download (public/downloads/Alaeddine_Hammouda_Resume.pdf, "Mon CV" button).
+- [x] Add technology marquee below experience and mouse-coordinate follower; verify desktop and mobile.
