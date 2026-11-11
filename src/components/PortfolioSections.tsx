@@ -1,7 +1,6 @@
-import { ArrowUpRight, Award, Workflow, Terminal, Tent, GraduationCap, ScanEye, Mail, Phone, MapPin, Github, Linkedin, Send } from 'lucide-react';
+import { ArrowUpRight, Award, Workflow, Terminal, Tent, GraduationCap, ScanEye, Mail, Phone, MapPin, Github, Linkedin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import ContactOrbit from './ContactOrbit';
 import { experiences, projects, skillGroups, profileLinks } from './portfolio-data';
 import { usePortfolioNode, usePortfolioText } from './portfolio-settings';
 import { TechnologyMarquee } from './PortfolioMotion';
