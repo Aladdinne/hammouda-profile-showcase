@@ -10,6 +10,24 @@ const avatarUrl = avatar;
 
 function PortfolioContent({language,setLanguage,dark,setDark}:{language:Language;setLanguage:(language:Language)=>void;dark:boolean;setDark:(dark:boolean)=>void}) {
  const t=usePortfolioText(); const [menu,setMenu]=useState(false);
+ const [activeSection,setActiveSection]=useState('');
+ useEffect(()=>{
+  const sections=Array.from(document.querySelectorAll<HTMLElement>('main section[id]'));
+  let frame=0;
+  const update=()=>{
+   const header=document.querySelector('.portfolio-nav');
+   const line=(header?.getBoundingClientRect().height ?? 80)+40;
+   let active='';
+   for(const section of sections){if(section.getBoundingClientRect().top<=line) active=section.id;}
+   if(window.scrollY>0 && window.scrollY+window.innerHeight>=document.documentElement.scrollHeight-2) active='contact';
+   setActiveSection(active==='home'?'':active);
+  };
+  const schedule=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(update);};
+  update();
+  window.addEventListener('scroll',schedule,{passive:true});
+  window.addEventListener('resize',schedule);
+  return()=>{cancelAnimationFrame(frame);window.removeEventListener('scroll',schedule);window.removeEventListener('resize',schedule);};
+ },[]);
  const links=[['experiences',t('Expériences','Experience')],['projects',t('Projets','Projects')],['skills',t('Compétences','Skills')],['education',t('Formation','Education')],['contact','Contact']];
  return <div className="min-h-screen bg-background text-foreground">
  <header className="portfolio-nav"><div className="portfolio-wrap"><div className="nav-inner"><a href="#home" className="brand" aria-label="Alaeddine Hammouda"><span className="brand-mark">A<span className="text-primary">.</span></span><span className="brand-name">Alaeddine Hammouda<span className="text-primary">.</span></span></a><nav className="nav-links" aria-label={t('Navigation principale','Main navigation')}>{links.map(([id,label])=><a href={`#${id}`} key={id}>{label}</a>)}</nav><div className="nav-tools"><div className="language-switch" aria-label={t('Langue','Language')}><Button variant="ghost" aria-pressed={language==='fr'} onClick={()=>setLanguage('fr')}>FR</Button><Button variant="ghost" aria-pressed={language==='en'} onClick={()=>setLanguage('en')}>EN</Button></div><Button variant="outline" size="icon" className="rounded-full h-9 w-9" title={dark?t('Mode clair','Light mode'):t('Mode sombre','Dark mode')} aria-label={dark?t('Mode clair','Light mode'):t('Mode sombre','Dark mode')} onClick={()=>setDark(!dark)}>{dark?<Sun/>:<Moon/>}</Button><Button variant="ghost" size="icon" className="md:hidden h-9 w-9" aria-label={t('Menu','Menu')} aria-expanded={menu} onClick={()=>setMenu(!menu)}>{menu?<X/>:<Menu/>}</Button></div></div>{menu&&<nav className="mobile-nav" aria-label={t('Navigation mobile','Mobile navigation')}>{links.map(([id,label])=><a href={`#${id}`} onClick={()=>setMenu(false)} key={id}>{label}</a>)}</nav>}</div></header>
