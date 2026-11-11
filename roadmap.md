@@ -6,3 +6,4 @@
 - [x] Verify navigation, switches and avatar rendering.
 - [x] Add original CV download (public/downloads/Alaeddine_Hammouda_Resume.pdf, "Mon CV" button).
 - [x] Add technology marquee below experience and mouse-coordinate follower; verify desktop and mobile.
+- [x] Replace contact form with animated AH orbit, Tunis clock and email-copy button; verify interactions and layouts.

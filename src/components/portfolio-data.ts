@@ -63,6 +63,14 @@ export const profileLinks = {
   github: 'https://github.com/Aladdinne',
 };
 
+export const contactPanelText = {
+  invitation: ['Un café, une idée de projet ou simplement un bonjour — ma boîte mail vous est ouverte.', 'Coffee chats, project ideas, or just saying hi — my inbox is always open.'] as Bilingual,
+  localTime: ['Heure locale — Tunis', 'Local time — Tunis'] as Bilingual,
+  copy: ['Copier mon email', 'Copy my email'] as Bilingual,
+  copied: ['Email copié !', 'Email copied!'] as Bilingual,
+  failed: ['Copie impossible. Vous pouvez utiliser le lien email à gauche.', 'Unable to copy. Please use the email link beside this panel.'] as Bilingual,
+};
+
 export const experiences: Experience[] = [
   {
     company: 'TSE Consulting INT',
