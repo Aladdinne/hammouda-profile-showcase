@@ -90,20 +90,37 @@ export function MouseCoordinates() {
   useEffect(() => {
     const media = window.matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
     let frame = 0;
+    const target = { x: 0, y: 0 };
+    const current = { x: 0, y: 0 };
+    let running = false;
     const hide = () => { follower.current?.classList.remove('is-active'); };
+    const step = () => {
+      const element = follower.current;
+      const text = label.current;
+      if (!element || !text) { running = false; return; }
+      current.x += (target.x - current.x) * 0.18;
+      current.y += (target.y - current.y) * 0.18;
+      element.style.transform = `translate3d(${current.x}px, ${current.y}px, 0)`;
+      element.classList.toggle('align-left', target.x > window.innerWidth - 140);
+      element.classList.toggle('align-top', target.y > window.innerHeight - 70);
+      text.textContent = `${Math.round(target.x)}, ${Math.round(target.y)}`;
+      if (Math.abs(target.x - current.x) > 0.1 || Math.abs(target.y - current.y) > 0.1) {
+        frame = requestAnimationFrame(step);
+      } else {
+        running = false;
+      }
+    };
     const move = (event: PointerEvent) => {
       if (!media.matches || event.pointerType === 'touch') { hide(); return; }
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        const element = follower.current;
-        const text = label.current;
-        if (!element || !text) return;
-        element.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0)`;
-        element.classList.toggle('align-left', event.clientX > window.innerWidth - 140);
-        element.classList.toggle('align-top', event.clientY > window.innerHeight - 70);
-        text.textContent = `${Math.round(event.clientX)}, ${Math.round(event.clientY)}`;
-        element.classList.add('is-active');
-      });
+      target.x = event.clientX;
+      target.y = event.clientY;
+      follower.current?.classList.add('is-active');
+      if (!running) {
+        if (current.x === 0 && current.y === 0) { current.x = target.x; current.y = target.y; }
+        running = true;
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(step);
+      }
     };
     window.addEventListener('pointermove', move, { passive: true });
     document.documentElement.addEventListener('pointerleave', hide);
