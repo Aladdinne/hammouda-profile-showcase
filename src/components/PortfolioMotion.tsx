@@ -39,75 +39,36 @@ export function IntroElectricity() {
     const svg = scene.current;
     const tile = svg?.parentElement;
     if (!svg || !tile) return;
-    const motion = window.matchMedia('(prefers-reduced-motion: no-preference)');
-    const pointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-    const bolts = Array.from(svg.querySelectorAll<SVGPathElement>('.electric-bolts path'));
+    const media = window.matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
     let frame = 0;
-    let visible = false;
-    let last = 0;
-    let target: { x: number; y: number } | null = null;
-    const jagged = (x: number, y: number, dx: number, dy: number, spread: number) => {
-      const length = Math.hypot(dx, dy) || 1;
-      const points = Array.from({ length: 10 }, (_, i) => {
-        const ratio = i / 9;
-        const jitter = i === 0 || i === 9 ? 0 : (Math.random() - .5) * spread;
-        return `${x + dx * ratio - dy / length * jitter} ${y + dy * ratio + dx / length * jitter}`;
-      });
-      const branchX = x + dx * .55;
-      const branchY = y + dy * .55;
-      return `M ${points.join(' L ')} M ${branchX} ${branchY} l ${-dy / length * 24} ${dx / length * 24} l ${dx * .14} ${dy * .14}`;
-    };
-    const hide = () => { target = null; svg.classList.remove('is-pointer-active'); };
-    const animate = (time: number) => {
-      if (!visible || !motion.matches || document.hidden) { frame = 0; return; }
-      if (time - last > 75) {
-        last = time;
-        bolts.forEach((bolt, i) => {
-          const travel = (time * .065 + i * 173) % 820 - 120;
-          const x = i % 2 === 0 ? 20 + Math.sin(time / 730 + i) * 9 : 580 + Math.sin(time / 810 + i) * 9;
-          bolt.setAttribute('d', jagged(x, travel, Math.sin(time / 530 + i) * 16, 135, 32));
-          bolt.style.opacity = String(.22 + Math.random() * .38);
-        });
-        if (target && spark.current) {
-          spark.current.setAttribute('d', jagged(target.x - 44, target.y + 35, 88, -70, 35));
-        }
-      }
-      frame = requestAnimationFrame(animate);
-    };
-    const resume = () => {
-      cancelAnimationFrame(frame);
-      frame = 0;
-      if (visible && motion.matches && !document.hidden) frame = requestAnimationFrame(animate);
-      if (!motion.matches || !pointer.matches || document.hidden) hide();
-    };
+    const hide = () => svg.classList.remove('is-pointer-active');
     const move = (event: PointerEvent) => {
-      if (!motion.matches || !pointer.matches || event.pointerType === 'touch') { hide(); return; }
-      const bounds = tile.getBoundingClientRect();
-      target = { x: (event.clientX - bounds.left) / bounds.width * 600, y: (event.clientY - bounds.top) / bounds.height * 700 };
-      svg.classList.add('is-pointer-active');
+      if (!media.matches || event.pointerType === 'touch') { hide(); return; }
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const bounds = tile.getBoundingClientRect();
+        const x = (event.clientX - bounds.left) / bounds.width * 600;
+        const y = (event.clientY - bounds.top) / bounds.height * 700;
+        spark.current?.setAttribute('d', `M ${x-44} ${y+24} l 23 -12 -8 -14 29 2 13 -20 -3 19 23 -7 -12 23 24 6 M ${x+13} ${y-20} l -9 -16 14 -12`);
+        svg.classList.add('is-pointer-active');
+      });
     };
     const observer = new IntersectionObserver(([entry]) => {
-      visible = Boolean(entry?.isIntersecting);
-      svg.classList.toggle('is-in-view', visible);
-      if (!visible) hide();
-      resume();
+      svg.classList.toggle('is-in-view', Boolean(entry?.isIntersecting));
+      if (!entry?.isIntersecting) hide();
     });
     observer.observe(tile);
     tile.addEventListener('pointermove', move, { passive: true });
     tile.addEventListener('pointerleave', hide);
     window.addEventListener('blur', hide);
-    motion.addEventListener('change', resume);
-    pointer.addEventListener('change', hide);
-    document.addEventListener('visibilitychange', resume);
+    media.addEventListener('change', hide);
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
       tile.removeEventListener('pointermove', move);
       tile.removeEventListener('pointerleave', hide);
       window.removeEventListener('blur', hide);
-      motion.removeEventListener('change', resume);
-      pointer.removeEventListener('change', hide);
-      document.removeEventListener('visibilitychange', resume);
+      media.removeEventListener('change', hide);
     };
   }, []);
   const circuits = [
@@ -119,7 +80,6 @@ export function IntroElectricity() {
   return <svg ref={scene} className="intro-electricity" viewBox="0 0 600 700" preserveAspectRatio="none" aria-hidden="true">
     <g className="electric-circuits">{circuits.map(d => <path key={d} d={d}/>)}</g>
     <g className="electric-pulses">{circuits.map(d => <path key={d} d={d} pathLength="100"/>)}</g>
-    <g className="electric-bolts">{[0, 1, 2, 3].map(i => <path key={i}/>)}</g>
     <path ref={spark} className="electric-pointer"/>
   </svg>;
 }
